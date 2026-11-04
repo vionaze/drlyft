@@ -69,9 +69,15 @@ git clone https://github.com/vionaze/drlyft.git /opt/dokterlift
 bash /opt/dokterlift/deploy/vps-deploy.sh
 ```
 
-Script akan:
+Untuk update berikutnya (pull + build + deploy):
 
-1. clone/pull repo ke `/opt/dokterlift`
+```bash
+bash /opt/dokterlift/deploy/update.sh
+```
+
+Script `vps-deploy.sh` akan:
+
+1. memakai checkout di `/opt/dokterlift`
 2. menulis `apps/web/.env.local`
 3. install dependency dengan pnpm 11
 4. build static export

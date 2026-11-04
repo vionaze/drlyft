@@ -17,11 +17,8 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 if [ ! -d "$APP_DIR/.git" ]; then
-  mkdir -p "$(dirname "$APP_DIR")"
-  git clone "$REPO" "$APP_DIR"
-else
-  git -C "$APP_DIR" fetch origin main
-  git -C "$APP_DIR" reset --hard origin/main
+  echo "Repo belum ada di $APP_DIR. Jalankan dulu: bash deploy/update.sh"
+  exit 1
 fi
 
 cd "$APP_DIR"

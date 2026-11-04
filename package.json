@@ -1,0 +1,29 @@
+{
+	"name": "dokterlift",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm --filter web dev",
+		"build": "pnpm --filter web build",
+		"preview": "node scripts/serve.mjs apps/web/out",
+		"check-types": "pnpm --filter web check-types",
+		"check": "pnpm --filter web check-types && biome check .",
+		"format": "biome check --write .",
+		"qa": "node scripts/check.mjs && node scripts/shoot.mjs",
+		"qa:check": "node scripts/check.mjs apps/web/out",
+		"qa:axe": "node scripts/axe.mjs http://127.0.0.1:4173"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "^4.10.2",
+		"@biomejs/biome": "^2.6.2",
+		"@dokterlift/config": "workspace:*",
+		"@types/node": "catalog:",
+		"playwright": "1.56.0",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@11.1.2"
+}

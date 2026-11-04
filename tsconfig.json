@@ -1,0 +1,3 @@
+{
+	"extends": "@dokterlift/config/tsconfig.base.json"
+}

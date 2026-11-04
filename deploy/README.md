@@ -33,7 +33,9 @@ Di Cloudflare → DNS:
 | A | `@` | `161.97.130.68` | Proxied |
 | CNAME | `www` | `dokterlift.com` | Proxied |
 
-Hapus record A/AAAA lama untuk `@` dan `www` yang masih mengarah ke server lain.
+Hapus record A/AAAA/CNAME lama untuk `@` dan `www` yang masih mengarah ke
+server lain, termasuk URL forwarding lama (saat ini `@` masih 302 ke `www`
+lewat Namecheap URL Forward). Jangan hapus record MX/TXT milik email.
 
 ## 3. SSL (Let's Encrypt)
 
@@ -65,5 +67,8 @@ test Nginx, dan reload.
 
 - `apps/web/.env.local` **tidak** ikut Git. Isinya:
   `NEXT_PUBLIC_SITE_URL=https://dokterlift.com`
+- Config ini **hanya** menambah server block untuk `dokterlift.com` di port
+  80/443. Port lain (3000, 3001, 8080, mail, dll.) dan server block situs lain
+  tidak disentuh.
 - Jangan menyentuh server block situs lain di `/etc/nginx/sites-enabled/`.
 - Log: `/var/log/nginx/dokterlift.access.log` dan `dokterlift.error.log`.

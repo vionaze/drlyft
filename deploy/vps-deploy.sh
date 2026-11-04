@@ -38,7 +38,22 @@ rsync -a --delete "$APP_DIR/apps/web/out/" "$WEB_ROOT/"
 chown -R deploy:deploy "$WEB_ROOT"
 
 install -m 644 "$APP_DIR/deploy/nginx/dokterlift.com.conf" "/etc/nginx/sites-available/$DOMAIN"
+
+# Kalau sertifikat sudah ada, tambahkan server block 443. Jangan sampai
+# deploy ulang menghapus HTTPS yang sudah terpasang.
+if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+  cat "$APP_DIR/deploy/nginx/dokterlift.com.ssl.conf" >> "/etc/nginx/sites-available/$DOMAIN"
+fi
+
 ln -sfn "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/$DOMAIN"
+
+# Reload Nginx otomatis setiap certbot memperbarui sertifikat.
+install -d /etc/letsencrypt/renewal-hooks/deploy
+cat > /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh <<'SH'
+#!/bin/sh
+systemctl reload nginx
+SH
+chmod +x /etc/letsencrypt/renewal-hooks/deploy/reload-nginx.sh
 
 nginx -t
 systemctl reload nginx

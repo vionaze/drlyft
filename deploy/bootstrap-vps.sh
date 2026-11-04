@@ -9,6 +9,9 @@ DOMAIN="${DOMAIN:-dokterlift.com}"
 install -d -o deploy -g deploy -m 755 /var/www/dokterlift
 
 install -m 644 "$ROOT/nginx/dokterlift.com.conf" "/etc/nginx/sites-available/$DOMAIN"
+if [ -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+  cat "$ROOT/nginx/dokterlift.com.ssl.conf" >> "/etc/nginx/sites-available/$DOMAIN"
+fi
 ln -sfn "/etc/nginx/sites-available/$DOMAIN" "/etc/nginx/sites-enabled/$DOMAIN"
 
 nginx -t

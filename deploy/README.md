@@ -28,9 +28,9 @@ curl -I -H 'Host: dokterlift.com' http://127.0.0.1/
 
 Di Cloudflare → DNS:
 
-| Type | Name | Content | Proxy |
-|---|---|---|---|
-| A | `@` | `161.97.130.68` | Proxied |
+| Type  | Name  | Content          | Proxy   |
+| ----- | ----- | ---------------- | ------- |
+| A     | `@`   | `161.97.130.68`  | Proxied |
 | CNAME | `www` | `dokterlift.com` | Proxied |
 
 Hapus record A/AAAA/CNAME lama untuk `@` dan `www` yang masih mengarah ke
@@ -43,10 +43,14 @@ DNS harus mengarah ke VPS dulu. Untuk menerbitkan sertifikat, **matikan proxy**
 (grey cloud) sementara pada record `@` dan `www`, lalu di VPS:
 
 ```bash
-certbot --nginx -d dokterlift.com -d www.dokterlift.com --redirect
+certbot certonly --webroot -w /var/www/dokterlift \
+  -d dokterlift.com -d www.dokterlift.com \
+  --non-interactive --agree-tos -m dokterlift9@gmail.com --no-eff-email
 ```
 
-Setelah sertifikat terbit, nyalakan proxy lagi dan set Cloudflare:
+Setelah sertifikat terbit, jalankan `bash /opt/dokterlift/deploy/vps-deploy.sh`
+sekali lagi agar server block 443 dipasang (script mendeteksi sertifikat).
+Lalu nyalakan proxy lagi dan set Cloudflare:
 
 - SSL/TLS → Overview → **Full (strict)**
 - Always Use HTTPS → ON

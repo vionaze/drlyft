@@ -103,4 +103,5 @@ export const nav = [
 	{ href: "/#proses", label: "Proses" },
 	{ href: "/#cabang", label: "Cabang" },
 	{ href: "/#faq", label: "FAQ" },
+	{ href: "/blog", label: "Blog" },
 ] as const;

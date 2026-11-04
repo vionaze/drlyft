@@ -1,3 +1,11 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Halaman tidak ditemukan",
+	alternates: { canonical: "/404" },
+	robots: { index: false, follow: false },
+};
+
 export default function NotFound() {
 	return (
 		<div className="wrap pt-[130px] pb-24 md:pt-[170px]">

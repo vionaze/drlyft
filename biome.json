@@ -29,6 +29,8 @@
 			"!**/convex/_generated",
 			"!**/out",
 			"!**/node_modules",
+			"!**/pnpm-lock.yaml",
+			"!apps/web/content/**",
 			"!**/.qa",
 			"!**/*.min.js",
 			"!packages/ui"

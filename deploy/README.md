@@ -54,7 +54,40 @@ Setelah sertifikat terbit, nyalakan proxy lagi dan set Cloudflare:
 Alternatif tanpa membuka proxy: gunakan **Cloudflare Origin Certificate**
 (SSL/TLS → Origin Server), simpan cert/key di VPS, lalu set Nginx ke sertifikat itu.
 
-## 4. Deploy update berikutnya
+## 4. Deploy langsung di VPS (tanpa PM2)
+
+Website ini **static export** — tidak ada proses Node yang perlu dijaga PM2.
+Nginx yang menyajikan file. Kalau mau build & deploy dari VPS:
+
+```bash
+# sekali saja
+git clone https://github.com/vionaze/drlyft.git /opt/dokterlift
+bash /opt/dokterlift/deploy/vps-deploy.sh
+```
+
+Script akan:
+
+1. clone/pull repo ke `/opt/dokterlift`
+2. menulis `apps/web/.env.local`
+3. install dependency dengan pnpm 11
+4. build static export
+5. rsync ke `/var/www/dokterlift`
+6. pasang server block Nginx khusus domain ini
+7. `nginx -t` + reload
+
+Tidak ada port baru, tidak ada PM2, dan server block situs lain tidak diubah.
+
+## 5. Soal PM2
+
+**Jangan** jalankan `pm2 start pnpm start` — project ini tidak punya server
+Next.js (`output: export`), jadi tidak ada proses yang bisa dijalankan PM2.
+Nginx sudah menjadi web server-nya.
+
+Kalau tetap ingin proses Node (tidak disarankan), baru gunakan static server
+seperti `pm2 serve /var/www/dokterlift 3002 --name dokterlift --spa` lalu proxy
+Nginx ke `127.0.0.1:3002`. Tapi ini menambah port dan proses tanpa manfaat.
+
+## 6. Deploy update dari laptop
 
 ```bash
 ./deploy/deploy.sh
